@@ -1,4 +1,4 @@
-[DEMO LINK](https://ikseloi.github.io/react_list-of-goods-hooks/) and add it to the PR description.
+[DEMO LINK](https://ikseloi.github.io/react_list-of-goods-hooks/)
 
 # React list of goods (Hooks)
 

@@ -25,22 +25,22 @@ export const App: React.FC = () => {
     reverse: false,
   });
 
-  const visisbleGoods = [...goodsFromServer];
+  const visibleGoods = [...goodsFromServer];
 
   switch (sortParams.sort) {
     case SortType.ALPHABET:
-      visisbleGoods.sort((a, b) => a.localeCompare(b));
+      visibleGoods.sort((a, b) => a.localeCompare(b));
       break;
     case SortType.LENGTH:
-      visisbleGoods.sort((a, b) => a.length - b.length);
+      visibleGoods.sort((a, b) => a.length - b.length);
       break;
   }
 
   if (sortParams.reverse) {
-    visisbleGoods.reverse();
+    visibleGoods.reverse();
   }
 
-  const hasChages = sortParams.sort !== SortType.DEFAULT || sortParams.reverse;
+  const hasChanges = sortParams.sort !== SortType.DEFAULT || sortParams.reverse;
 
   return (
     <div className="section content">
@@ -75,10 +75,10 @@ export const App: React.FC = () => {
           Reverse
         </button>
 
-        {hasChages && (
+        {hasChanges && (
           <button
             type="button"
-            className={`button is-danger ${sortParams.reverse ? '' : 'is-light'}`}
+            className="button is-danger"
             onClick={() =>
               setSortParams({ sort: SortType.DEFAULT, reverse: false })
             }
@@ -89,7 +89,7 @@ export const App: React.FC = () => {
       </div>
 
       <ul>
-        {visisbleGoods.map(good => (
+        {visibleGoods.map(good => (
           <li key={good} data-cy="Good">
             {good}
           </li>
