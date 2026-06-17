@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.scss';
 
-export const goodsFromServer = [
+import { SortType } from './types/SortType';
+import { SortParams } from './types/SortParams';
+import { Good } from './types/Good';
+
+export const goodsFromServer: Good[] = [
   'Dumplings',
   'Carrot',
   'Eggs',
@@ -16,35 +20,80 @@ export const goodsFromServer = [
 ];
 
 export const App: React.FC = () => {
+  const [sortParams, setSortParams] = useState<SortParams>({
+    sort: SortType.DEFAULT,
+    reverse: false,
+  });
+
+  const visisbleGoods = [...goodsFromServer];
+
+  switch (sortParams.sort) {
+    case SortType.ALPHABET:
+      visisbleGoods.sort((a, b) => a.localeCompare(b));
+      break;
+    case SortType.LENGTH:
+      visisbleGoods.sort((a, b) => a.length - b.length);
+      break;
+  }
+
+  if (sortParams.reverse) {
+    visisbleGoods.reverse();
+  }
+
+  const hasChages = sortParams.sort !== SortType.DEFAULT || sortParams.reverse;
+
   return (
     <div className="section content">
       <div className="buttons">
-        <button type="button" className="button is-info is-light">
+        <button
+          type="button"
+          className={`button is-info ${sortParams.sort === SortType.ALPHABET ? '' : 'is-light'}`}
+          onClick={() =>
+            setSortParams(prev => ({ ...prev, sort: SortType.ALPHABET }))
+          }
+        >
           Sort alphabetically
         </button>
 
-        <button type="button" className="button is-success is-light">
+        <button
+          type="button"
+          className={`button is-success ${sortParams.sort === SortType.LENGTH ? '' : 'is-light'}`}
+          onClick={() =>
+            setSortParams(prev => ({ ...prev, sort: SortType.LENGTH }))
+          }
+        >
           Sort by length
         </button>
 
-        <button type="button" className="button is-warning is-light">
+        <button
+          type="button"
+          className={`button is-warning ${sortParams.reverse ? '' : 'is-light'}`}
+          onClick={() =>
+            setSortParams(prev => ({ ...prev, reverse: !prev.reverse }))
+          }
+        >
           Reverse
         </button>
 
-        <button type="button" className="button is-danger is-light">
-          Reset
-        </button>
+        {hasChages && (
+          <button
+            type="button"
+            className={`button is-danger ${sortParams.reverse ? '' : 'is-light'}`}
+            onClick={() =>
+              setSortParams({ sort: SortType.DEFAULT, reverse: false })
+            }
+          >
+            Reset
+          </button>
+        )}
       </div>
 
       <ul>
-        <ul>
-          <li data-cy="Good">Dumplings</li>
-          <li data-cy="Good">Carrot</li>
-          <li data-cy="Good">Eggs</li>
-          <li data-cy="Good">Ice cream</li>
-          <li data-cy="Good">Apple</li>
-          <li data-cy="Good">...</li>
-        </ul>
+        {visisbleGoods.map(good => (
+          <li key={good} data-cy="Good">
+            {good}
+          </li>
+        ))}
       </ul>
     </div>
   );
